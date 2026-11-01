@@ -1,0 +1,26 @@
+'use strict';
+
+const pipe = (...fns) => {
+  for (const f of fns) {
+    if (typeof f !== 'function') {
+      throw new Error('All arguments must be functions');
+    }
+  }
+  return (x) => fns.reduce((acc, fn) => fn(acc), x);
+};
+
+const inc = x => ++x;
+const twice = x => x * 2;
+const cube = x => x ** 3;
+
+const f1 = pipe(inc, twice, cube);
+console.dir(f1(5));
+
+const f2 = pipe(inc, inc);
+console.dir(f2(7));
+
+try {
+  const f3 = pipe(inc, 7, cube);
+} catch (e) {
+  console.dir(e.message);
+}
